@@ -10,8 +10,8 @@ var enemyData = _.map(_.range(0, numEnemies), function(item, key) {
   return {
     color: "blue",
     id: key,
-    x: Math.random() * 700,
-    y: Math.random() * 700,
+    x: function() { return Math.random() * 700 },
+    y: function() { return Math.random() * 700 },
     radius: 10
   }
 });
@@ -25,7 +25,19 @@ var board = d3.select("body").selectAll("svg").data(gameBoardData, function(d) {
 var enemies = d3.select("svg").selectAll("circle")
   .data(enemyData)
   .enter().append("circle")
-    .attr("cx", function(d) {return d.x})
-    .attr("cy", function(d) {return d.y})
+    .attr("cx", function(d) {return d.x()})
+    .attr("cy", function(d) {return d.y()})
     .attr("r", function(d) {return d.radius})
     .style("fill", function(d) {return d.color});
+
+var moveEnemies = function() {
+  d3.selectAll("circle")
+    .transition()
+      .duration(1000)
+      .attr("cx", function(d) {return d.x()})
+      .attr("cy", function(d) {return d.y()})
+};
+
+setInterval(function() {
+  moveEnemies();
+}, 1000);
