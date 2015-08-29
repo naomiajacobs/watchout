@@ -16,7 +16,7 @@
 
 .circle {
   -webkit-animation-name: fullspin;
-  -webkit-animation-ease: linear;
+  -webkit-animation-ease: cubic;
   -webkit-animation-duration: 1s;
   -webkit-animation-iteration-count: infinite;
 }

@@ -3,7 +3,7 @@ var highScore = 0;
 var collisions = 0;
 
 var gameBoardData = [{
-  background: "LightBlue",
+  background: "MidnightBlue",
   height: '700px',
   width: '700px'
 }];
@@ -101,15 +101,17 @@ var board = d3.select("body").selectAll("svg").data(gameBoardData, function(d) {
     .style("height", function(d) {return d.height})
     .style("background-color", function(d) {return d.background})
 
-var enemies = d3.select("svg").selectAll("image")
+var enemies = d3.select("svg").selectAll("svg")
   .data(enemyData)
-  .enter().append("image")
+  .enter().append("svg")
     .attr("x", function(d) {return d.setNewX()})
     .attr("y", function(d) {return d.setNewY()})
     .attr("width", function(d) {return d.width})
     .attr("height", function(d) {return d.height})
+    .
     .attr("xlink:href", "shuriken.svg")
     .style("fill", function(d) {return d.color})
+    .style("stroke", function(d) {return d.color})
     .classed("circle", true)
     .attr("transform-origin", "50% 50%");
 
