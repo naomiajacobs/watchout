@@ -1,3 +1,7 @@
+var score = 0;
+var highScore = 0;
+var collisions = 0;
+
 var gameBoardData = [{
   background: "MidnightBlue",
   height: '700px',
@@ -116,14 +120,17 @@ var detectCollision = function(enemy) {
   }
 };
 
+
 var detectCollisions = function() {
   _.each(document.getElementsByClassName("circle"), function(enemy) { //enemy should be an object with an x prop
     if (detectCollision(enemy)) {
-      console.log("There was a collision!");
-      //compare high score to current score
-        //if higher, reset high score to current score
-      //set current score to 0
-      //reset timer
+      if (score > highScore) {
+        highScore = score;
+        d3.selectAll(".high")
+          .text("High Score is: " + highScore);
+      }
+      collisions++;
+      score = 0;
     }
   });
 };
@@ -135,3 +142,23 @@ setInterval(detectCollisions, 100);
 setInterval(function() {
   moveEnemies();
 }, 5000);
+
+
+var increaseScore = function() {
+  score++;
+  d3.selectAll(".current")
+    .text("Current Score is: " + score);
+};
+
+setInterval(increaseScore, 50);
+
+
+
+
+
+
+
+
+
+
+
