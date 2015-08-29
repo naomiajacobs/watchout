@@ -101,19 +101,19 @@ var board = d3.select("body").selectAll("svg").data(gameBoardData, function(d) {
     .style("height", function(d) {return d.height})
     .style("background-color", function(d) {return d.background})
 
-var enemies = d3.select("svg").selectAll("svg")
+var enemies = d3.select("svg").selectAll("image")
   .data(enemyData)
-  .enter().append("svg")
+  .enter().append("image")
     .attr("x", function(d) {return d.setNewX()})
     .attr("y", function(d) {return d.setNewY()})
     .attr("width", function(d) {return d.width})
     .attr("height", function(d) {return d.height})
-    .
+    .classed("circle", true)
+    .attr("transform-origin", "50% 50%")
     .attr("xlink:href", "shuriken.svg")
+    .selectAll("line")
     .style("fill", function(d) {return d.color})
     .style("stroke", function(d) {return d.color})
-    .classed("circle", true)
-    .attr("transform-origin", "50% 50%");
 
 var player = d3.select("svg").selectAll("ellipse")
   .data(playerData)
@@ -183,14 +183,3 @@ var increaseScore = function() {
 };
 
 setInterval(increaseScore, 50);
-
-
-
-
-
-
-
-
-
-
-
