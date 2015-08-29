@@ -4,23 +4,6 @@ var gameBoardData = [{
   width: '700px'
 }];
 
-var numEnemies = 30;
-
-var playerData = [
-  {
-    x: '350px',
-    y: '350px',
-    color: 'yellow',
-    sideLength: 20
-  }
-];
-
-var drag = d3.behavior.drag()
-  .on('drag', function() {
-    player.attr('x', d3.event.x)
-                   .attr('y', d3.event.y);
-  });
-
 var colors = [
   "blue",
   "purple",
@@ -53,6 +36,8 @@ var colors = [
   "CornflowerBlue",
   "Aqua"];
 
+var numEnemies = 30;
+
 var enemyData = _.map(_.range(0, numEnemies), function(item, key) {
   return {
     color: colors[Math.floor(Math.random() * colors.length)],
@@ -62,6 +47,22 @@ var enemyData = _.map(_.range(0, numEnemies), function(item, key) {
     radius: 10
   }
 });
+
+var playerData = [
+  {
+    cx: 350,
+    cy: 350,
+    color: 'yellow',
+    r: 15
+  }
+];
+
+var drag = d3.behavior.drag()
+  .on('drag', function() {
+    player.attr('cx', d3.event.x)
+          .attr('cy', d3.event.y);
+  });
+
 
 var board = d3.select("body").selectAll("svg").data(gameBoardData, function(d) {return d})
   .enter().append("svg")
@@ -75,15 +76,17 @@ var enemies = d3.select("svg").selectAll("circle")
     .attr("cx", function(d) {return d.x()})
     .attr("cy", function(d) {return d.y()})
     .attr("r", function(d) {return d.radius})
-    .style("fill", function(d) {return d.color});
+    .style("fill", function(d) {return d.color})
+    .classed("circle", true);
 
-var player = d3.select("svg").selectAll("rect")
+var player = d3.select("svg").selectAll("ellipse")
   .data(playerData)
-  .enter().append("rect")
-    .attr("x", function(d) {return d.x})
-    .attr("y", function(d) {return d.y})
-    .attr("width", function(d) {return d.sideLength})
-    .attr("height", function(d) {return d.sideLength})
+  .enter().append("ellipse")
+    .attr("cx", function(d) {return d.cx})
+    .attr("cy", function(d) {return d.cy})
+    .attr("rx", function(d) {return d.r})
+    .attr("ry", function(d) {return d.r})
+    .classed("player", true)
     .style("fill", function(d) {return d.color})
     .call(drag);
 
@@ -97,6 +100,37 @@ var moveEnemies = function() {
 };
 
 moveEnemies();
+
+var findDistance = function(enemy) {
+  var enemyX = enemy.getAttribute("cx");
+  var enemyY = enemy.getAttribute("cy");
+  var playerX = document.getElementsByClassName("player")[0].getAttribute("cx");
+  var playerY = document.getElementsByClassName("player")[0].getAttribute("cy");
+  return Math.sqrt(Math.pow((playerX - enemyX), 2) + Math.pow((playerY - enemyY), 2));
+};
+
+var detectCollision = function(enemy) {
+  var dist = findDistance(enemy);
+  if (dist < 25) {
+    return true;
+  }
+};
+
+var detectCollisions = function() {
+  _.each(document.getElementsByClassName("circle"), function(enemy) { //enemy should be an object with an x prop
+    if (detectCollision(enemy)) {
+      console.log("There was a collision!");
+      //compare high score to current score
+        //if higher, reset high score to current score
+      //set current score to 0
+      //reset timer
+    }
+  });
+};
+
+detectCollisions();
+
+setInterval(detectCollisions, 100);
 
 setInterval(function() {
   moveEnemies();
